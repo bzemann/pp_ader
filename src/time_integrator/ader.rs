@@ -55,7 +55,7 @@ pub trait TimeIntegratorMaxPrincipal {
 
 //STRUCTS
 pub struct PredictorCorrector;
-pub struct ADER1DSeconOrder;
+pub struct MPPredictorCorrector;
 pub struct ADER1DThirdOrder;
 
 //HELPERS
@@ -373,7 +373,7 @@ impl TimeIntegratorADER for ADER1DThirdOrder {
     }
 }
 
-impl TimeIntegratorMaxPrincipal for PredictorCorrector {
+impl TimeIntegratorMaxPrincipal for MPPredictorCorrector {
     fn update(
         &self,
         min: f64,

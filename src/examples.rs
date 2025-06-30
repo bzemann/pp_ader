@@ -11,7 +11,10 @@ use crate::time_integrator::{
     fvm_ssp_rk::LinearAdvection,
 };
 
-use crate::convergence::convergence_burger;
+use crate::convergence::{
+    convergence_burger, convergence_burger_ader3, convergence_burger_mp_pc, convergence_burger_pc,
+    convergence_lin_adv_ader3, convergence_lin_adv_mp_pc, convergence_lin_adv_pc,
+};
 
 use std::f64::consts::PI;
 
@@ -155,6 +158,162 @@ pub fn conv_burger() -> Result<(), Box<dyn std::error::Error>> {
     convergence_burger(
         x_begin, x_end, t_begin, t_end, c, gamma_l, gamma_c, gamma_r, p, &init_std, &init_weno,
         cfl_fo, cfl_tvd, cfl_weno, csv_path,
+    )?;
+
+    Ok(())
+}
+
+pub fn conv_lin_pc() -> Result<(), Box<dyn std::error::Error>> {
+    let x_begin = 0.0;
+    let x_end = 1.0;
+    let t_begin = 0.0;
+    let t_end = 1.5;
+    let cfl_pc = 0.8;
+    let c = 1.0;
+
+    let gamma_l = 1.0;
+    let gamma_c = 50.0;
+    let gamma_r = 1.0;
+    let p = 4;
+
+    let init_weno = initial::sin_weno();
+
+    let csv_path = "results/csv_files/convergence/conv_lin_adv_ader_pc.csv";
+
+    convergence_lin_adv_pc(
+        x_begin, x_end, t_begin, t_end, c, gamma_l, gamma_c, gamma_r, p, &init_weno, cfl_pc,
+        csv_path,
+    )?;
+
+    Ok(())
+}
+
+pub fn conv_lin_mp_pc() -> Result<(), Box<dyn std::error::Error>> {
+    let x_begin = 0.0;
+    let x_end = 1.0;
+    let t_begin = 0.0;
+    let t_end = 1.5;
+    let cfl_pc = 0.8;
+    let c = 1.0;
+
+    let gamma_l = 1.0;
+    let gamma_c = 50.0;
+    let gamma_r = 1.0;
+    let p = 4;
+
+    let init_weno = initial::sin_weno();
+
+    let csv_path = "results/csv_files/convergence/conv_lin_adv_ader_mp_pc.csv";
+
+    convergence_lin_adv_mp_pc(
+        x_begin, x_end, t_begin, t_end, c, gamma_l, gamma_c, gamma_r, p, &init_weno, cfl_pc,
+        csv_path,
+    )?;
+
+    Ok(())
+}
+
+pub fn conv_burger_pc() -> Result<(), Box<dyn std::error::Error>> {
+    let x_begin = 0.0;
+    let x_end = 1.0;
+    let t_begin = 0.0;
+    let t_end = 0.5;
+    let cfl_pc = 0.8;
+    let cfl_weno = 0.5;
+    let c = 1.0;
+
+    let gamma_l = 1.0;
+    let gamma_c = 50.0;
+    let gamma_r = 1.0;
+    let p = 4;
+
+    let init_std = initial::sin_standard();
+    let init_weno = initial::sin_weno();
+
+    let csv_path = "results/csv_files/convergence/conv_burger_ader_pc_after_tc.csv";
+
+    convergence_burger_pc(
+        x_begin, x_end, t_begin, t_end, c, gamma_l, gamma_c, gamma_r, p, &init_weno, &init_std,
+        cfl_pc, cfl_weno, csv_path,
+    )?;
+
+    Ok(())
+}
+
+pub fn conv_burger_mp_pc() -> Result<(), Box<dyn std::error::Error>> {
+    let x_begin = 0.0;
+    let x_end = 1.0;
+    let t_begin = 0.0;
+    let t_end = 0.5;
+    let cfl_pc = 0.8;
+    let cfl_weno = 0.5;
+    let c = 1.0;
+
+    let gamma_l = 1.0;
+    let gamma_c = 50.0;
+    let gamma_r = 1.0;
+    let p = 4;
+
+    let init_std = initial::sin_standard();
+    let init_weno = initial::sin_weno();
+
+    let csv_path = "results/csv_files/convergence/conv_burger_ader_mp_pc_after_tc.csv";
+
+    convergence_burger_mp_pc(
+        x_begin, x_end, t_begin, t_end, c, gamma_l, gamma_c, gamma_r, p, &init_weno, &init_std,
+        cfl_pc, cfl_weno, csv_path,
+    )?;
+
+    Ok(())
+}
+
+pub fn conv_lin_adv_ader3() -> Result<(), Box<dyn std::error::Error>> {
+    let x_begin = 0.0;
+    let x_end = 1.0;
+    let t_begin = 0.0;
+    let t_end = 0.5;
+    let cfl_ader3 = 0.001;
+    let c = 1.0;
+
+    let gamma_l = 1.0;
+    let gamma_c = 50.0;
+    let gamma_r = 1.0;
+    let p = 4;
+
+    let init_weno = initial::sin_weno();
+
+    let csv_path = "results/csv_files/convergence/conv_lin_adv_ader3_balsara.csv";
+
+    convergence_lin_adv_ader3(
+        x_begin, x_end, t_begin, t_end, c, gamma_l, gamma_c, gamma_r, p, &init_weno, cfl_ader3,
+        csv_path,
+    )?;
+
+    Ok(())
+}
+
+pub fn conv_burger_ader3() -> Result<(), Box<dyn std::error::Error>> {
+    let x_begin = 0.0;
+    let x_end = 1.0;
+    let t_begin = 0.0;
+    let t_end = 0.1;
+    let cfl_ader3 = 0.0005;
+    let cfl_weno = 0.5;
+    let c = 1.0;
+
+    let gamma_l = 1.0;
+    let gamma_c = 50.0;
+    let gamma_r = 1.0;
+    let p = 4;
+
+    let init_std = initial::sin_standard();
+    let init_weno = initial::sin_weno();
+
+    let csv_path = "results/csv_files/convergence/conv_burger_ader3_before_tc.csv";
+
+    convergence_burger_ader3(
+        x_begin, x_end, t_begin, t_end, c, gamma_l, gamma_c, gamma_r, p, &init_weno, &init_std,
+        cfl_ader3, cfl_weno, csv_path,
     )?;
 
     Ok(())
